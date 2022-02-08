@@ -28,6 +28,10 @@ public class ShipSkeleton {
         return false;
     }
 
+    public boolean cellStatus(int index) {
+        return cellAlive[index];
+    }
+
     private int calculateDistance(Point coordinates) {
         return (start.calculateDistance(coordinates));
     }

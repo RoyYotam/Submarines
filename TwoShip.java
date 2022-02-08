@@ -8,6 +8,11 @@ public class TwoShip extends ShipSkeleton {
         src = "Two" + color + ".png";
     }
 
+    public TwoShip(Point p, int direction, String color) {
+        super(p, 2, direction);
+        src = "Four" + color + ".png";
+    }
+
     public String toString() {
         StringBuilder st = new StringBuilder();
         st.append("Ship status: ").append(this.isAlive() ? "alive" : "dead").append("\n");

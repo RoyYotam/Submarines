@@ -6,7 +6,10 @@ public class FourShip extends ShipSkeleton {
         src = "Four" + color + ".png";
     }
 
-    // TODO: Constructor with 'Point' and direction and color.
+    public FourShip(Point p, int direction, String color) {
+        super(p, 4, direction);
+        src = "Four" + color + ".png";
+    }
 
     public String toString() {
         StringBuilder st = new StringBuilder();

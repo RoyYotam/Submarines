@@ -7,6 +7,11 @@ public class ThreeShip extends ShipSkeleton {
         src = "Three" + color + ".png";
     }
 
+    public ThreeShip(Point p, int direction, String color) {
+        super(p, 3, direction);
+        src = "Four" + color + ".png";
+    }
+
     public String toString() {
         StringBuilder st = new StringBuilder();
         st.append("Ship status: ").append(this.isAlive() ? "alive" : "dead").append("\n");

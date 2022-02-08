@@ -9,6 +9,12 @@ public class PointStatus extends Point {
         setDefault();
     }
 
+    public PointStatus(PointStatus p) {
+        super(p);
+        isTaken = p.isTaken;
+        beenGuessed = p.beenGuessed;
+    }
+
     private void setDefault() {
         isTaken = false;
         beenGuessed = false;

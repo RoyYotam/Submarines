@@ -13,6 +13,8 @@ public class Point {
         this.Y_pivot = "" + coordinates.charAt(1);
     }
 
+    // TODO: Constructor with 'Point'.
+
     public String toString() {
         return "( " + X_pivot + ", " + Y_pivot + " )";
     }

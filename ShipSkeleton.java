@@ -16,6 +16,8 @@ public class ShipSkeleton {
         }
     }
 
+    // TODO: Constructor with 'Point' and direction and length.
+
     public void hitCell(String coordinates) {
         int distance = calculateDistance(new Point(coordinates));
         cellAlive[distance] = false;
@@ -28,11 +30,16 @@ public class ShipSkeleton {
         return false;
     }
 
-    public boolean cellStatus(int index) {
-        return cellAlive[index];
-    }
-
     private int calculateDistance(Point coordinates) {
         return (start.calculateDistance(coordinates));
+    }
+
+    public String toString() {
+        StringBuilder st = new StringBuilder();
+        for (int i = 0; i < length; i ++) {
+            st.append("cell ").append(i + 1).append(" ").append(cellAlive[i] ? "alive" : "dead").append("\n");
+        }
+
+        return st.toString();
     }
 }

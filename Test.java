@@ -8,21 +8,19 @@ import java.io.IOException;
 import java.io.File;
 import java.awt.Point;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class Test {
     public static void main(String[] args) {
         JFrame frame = new JFrame("test!");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(450, 470);//SCREEN_SIZE, SCREEN_SIZE);
+        frame.setSize(500, 500);
         frame.setResizable(false);
 
         //Adding Components to the frame.
-        //frame.getContentPane().add(new ImageShow("res/Board.png", 0, 0));
         SetBoard s = new SetBoard();
         frame.getContentPane().add(s);
-        //frame.getContentPane().add(new ShipSet("TwoRed"));
-        //frame.pack();
         frame.setVisible(true);
 
         frame.addMouseListener(new MouseListener() {
@@ -54,18 +52,24 @@ public class Test {
             }
         });
 
-        /*
-        while (true) {
-
-            System.out.println(MouseInfo.getPointerInfo().getLocation());
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (Exception e) {
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
 
             }
-        }
 
-         */
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == 10) {
+                    s.next();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
     }
 }
 
@@ -133,16 +137,36 @@ class ShipSet extends JPanel implements MouseMotionListener {
 }
 
 class SetBoard extends JPanel {
+    private final int Ships = 7;
     private Image background;
-    private Image ship;
-    int xPos, yPos;
+    private final Image[] ship = new Image[Ships];
+    private final int[] xPos = new int[Ships], yPos = new int[Ships];
+    private final int[] maxByLength = {0, 415, 370, 325, 285}; // Length - xPos
+    private final boolean[] located = new boolean[Ships]; // TODO: function set all to false.
+    private int current = 0;
+
+    HashMap<String, int[]> cleanCoordinates = new HashMap<>();
+    HashMap<Integer, String> cleanPath = new HashMap<>();
 
     public SetBoard() {
+        cleanCoordinates.put("clean/FourRed.png", new int[]{15, 15, 4}); // X, Y, Length
+        cleanCoordinates.put("clean/FourBlue.png", new int[]{15, 15, 4});
+        cleanCoordinates.put("clean/ThreeBlue.png", new int[]{12, 10, 3});
+        cleanCoordinates.put("clean/TwoRed.png", new int[]{12, 15, 2});
+        cleanCoordinates.put("clean/TwoBlue.png", new int[]{12, 15, 2});
+        cleanCoordinates.put("clean/EmptyKube.png", new int[]{9, 6, 1});
+        cleanCoordinates.put("clean/AlmostKube.png", new int[]{9, 6, 1});
         try {
-            background = ImageIO.read(new File("res/Board2.png"));
-            ship = ImageIO.read(new File("res/FourRed2.png"));
-            xPos = 5; // 30
-            yPos = 10; // 60
+            background = ImageIO.read(new File("clean/BoardClean.png"));
+            int i = 0;
+            for (String path : cleanCoordinates.keySet()) {
+                ship[i] = ImageIO.read(new File(path));
+                cleanPath.put(i, path);
+                xPos[i] = cleanCoordinates.get(path)[0];
+                yPos[i] = cleanCoordinates.get(path)[1];
+                i ++;
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -151,22 +175,36 @@ class SetBoard extends JPanel {
     protected void paintComponent(Graphics gr) {
         super.paintComponent(gr);
         gr.drawImage(background, 0, 0, this);
-        gr.drawImage(ship, xPos, yPos, this);
+        for (int i = 0; i < ship.length; i ++) {
+            gr.drawImage(ship[i], xPos[i], yPos[i], this);
+        }
     }
 
     public void setIm(MouseEvent e) {
-        xPos = ((((e.getX() - 10) / 40) * 40) + 15);
-        yPos = ((((e.getY() - 40) / 40) * 40) + 15);
+        xPos[current] = ((((e.getX() - 10) / 45) * 45) + cleanCoordinates.get(cleanPath.get(current))[0]);
+        yPos[current] = ((((e.getY() - 40) / 43) * 43) + cleanCoordinates.get(cleanPath.get(current))[1]);
 
-        if (yPos > 230) yPos += 10;
-
-        if (xPos > 280) xPos = 260;
-        else if (xPos < 50) xPos = 5;
-
-        if (yPos < 40) yPos = 10;
-        else if (yPos > 375) yPos = 385;
+        if (yPos[current] > 402) yPos[current] = 402; // Out of board.
+        if (xPos[current] + ship[current].getWidth(this) > 470) xPos[current] =
+                maxByLength[cleanCoordinates.get(cleanPath.get(current))[2]]; // Out of board.
 
         repaint();
+    }
+
+    public void next() {
+        located[current] = true;
+        current ++;
+        if (current >= Ships) {
+            current = 0;
+        }
+    }
+
+    public boolean allLocated() {
+        for (boolean b : located) {
+            if (!b)
+                return false;
+        }
+        return true;
     }
 }
 

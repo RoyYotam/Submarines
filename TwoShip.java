@@ -5,7 +5,7 @@ public class TwoShip extends ShipSkeleton {
 
     public TwoShip(String x_pivot, String y_pivot, int direction, String color) {
         super(x_pivot, y_pivot, 2, direction);
-        src = "Four" + color + ".png";
+        src = "Two" + color + ".png";
     }
 }
 

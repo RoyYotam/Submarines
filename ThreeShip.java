@@ -4,6 +4,6 @@ public class ThreeShip extends ShipSkeleton {
 
     public ThreeShip(String x_pivot, String y_pivot, int direction, String color) {
         super(x_pivot, y_pivot, 3, direction);
-        src = "Four" + color + ".png";
+        src = "Three" + color + ".png";
     }
 }
